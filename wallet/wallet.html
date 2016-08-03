@@ -6,39 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SLYCE TOP SRP DONORS</title>
   <style>
-/*  img {
-    height: 128px;
-    float: left;
+  .table td.fit, 
+  .table th.fit {
+    white-space: nowrap;
+    width: 1%;
   }
-  table {
-  border: 1px solid #666;   
-    width: 100%;
-}
-th {
-  background: #f8f8f8; 
-  font-weight: bold;    
-    padding: 2px;
-}*/
-	.table td.fit, 
-	.table th.fit {
-	    white-space: nowrap;
-	    width: 1%;
-	}
-	/* For fixed navbar */
-	body {
-  padding-top: 65px;
-}
-.navbar-static-top {
-  margin-bottom: 19px;
-}
-
-@media (max-width: 767px) {
-	body {
-  padding-top: 130px;
-}
-}
-
-
+  /* For fixed navbar */
+  body {
+    padding-top: 65px;
+  }
+  .navbar-static-top {
+    margin-bottom: 19px;
+  }
+  @media (max-width: 767px) {
+    body {
+      padding-top: 130px;
+    }
+  }
   </style>
   <link rel="shortcut icon" href="/intel/img/slyce-logo-150.png" />
   <!-- link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" -->
@@ -59,38 +43,28 @@ th {
       <a class="navbar-brand" href="#">SLYCE TOP SRP DONORS</a>
     </div>
     <div class="nav navbar-nav navbar-right">
-<!--
-    	<form action="http://slyce.wikidot.com/life-in-0-0#toc13"><button 
-    		class="navbar-btn btn btn-success" href="http://slyce.wikidot.com/life-in-0-0#toc13">Donate Now</button></form>
-    	<form><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#howto">1 Open Modal</button></form>
--->
         <button type="button" class="btn navbar-btn btn-success" data-toggle="modal" data-target="#howto">Donate Now</button>
     </div>
 </nav>
 
 <div class="container" style="text-align: center">
-<div class="progress">
-  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="500000000000" style="width: 10%;" id="balance-bar">
-    <span class="sr-only" id="balance" style="align: center;"></span>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="500000000000" style="width: 10%;" id="balance-bar">
+      <span class="sr-only" id="balance" style="align: center;"></span>
+    </div>
   </div>
-</div>
-<span id="balance-text"><span>
-</div>
-
-<div class="container" style="text-align: center">
+  <span id="balance-text"><span>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-<h3>Top Donors, Last Week</h3>
-<table id="top_last_week" class="table table-hover">
-</table>
+          <h3>Top Donors, Last Week</h3>
+          <table id="top_last_week" class="table table-hover"></table>
         </div>
         <div class="col-lg-6">
-<h3>Top Donors, Last Month</h3>
-<table id="top_last_month" class="table table-hover">
-</table>
+          <h3>Top Donors, Last Month</h3>
+          <table id="top_last_month" class="table table-hover"></table>
         </div>
     </div>
 </div>
@@ -98,40 +72,37 @@ th {
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-<h3>Top Donors, This Week, So Far</h3>
-<table id="top_current_week" class="table table-hover">
-</table>
+          <h3>Top Donors, This Week, So Far</h3>
+          <table id="top_current_week" class="table table-hover"></table>
         </div>
         <div class="col-lg-6">
-<h3>Top Donors, This Month, So Far</h3>
-<table id="top_current_month" class="table table-hover">
-</table>
+          <h3>Top Donors, This Month, So Far</h3>
+          <table id="top_current_month" class="table table-hover"></table>
         </div>
     </div>
 </div>
 
 <div class="container">
-<h3 id="top_title"></h3>
-<table id="top" class="table table-hover">
-</table>
+  <h3 id="top_title"></h3>
+  <table id="top" class="table table-hover"></table>
 </div>
 
 <div class="container">
-<h3>Donation Log</h3>
-<table id="donations" class="table table-hover">
-<thead>	
-    <tr>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Donor</th>
-        <th>Reason</th>
-    </tr>
-</thead>
-</table>
+  <h3>Donation Log</h3>
+  <table id="donations" class="table table-hover">
+  <thead> 
+      <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Donor</th>
+          <th>Reason</th>
+      </tr>
+  </thead>
+  </table>
 </div>
 
 <div id="howto" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog" role="document">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -162,43 +133,62 @@ th {
   </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+<div id="error_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog" role="document">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">ERROR LOADING TRANSACTIONS</h4>
+      </div>
+      <div id="error_message" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <script>
 
 var goal = 500000000000;
 
 function withCommas(x) {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function drawTable(id, data, donors, limit) {
-	if (! data ) return;
-	if (data.length < 1) {
-	    var row = $("<tr />")
-	    $(id).append(row);		
-	    row.append($("<td class=\"danger\">None.  Please consider <a data-toggle=\"modal\" data-target=\"#howto\" href=\"#\">donating</a>.</td>"));
-	    return;
-	}
-    for (var i = 0; i < data.length && i < limit; i++) {
-        drawRow(id, data[i], donors);
-    }
+  if (! data ) return;
+  if (data.length < 1) {
+    var row = $("<tr />")
+    $(id).append(row);    
+    row.append($("<td class=\"danger\">None.  Please consider <a data-toggle=\"modal\" data-target=\"#howto\" href=\"#\">donating</a>.</td>"));
+    return;
+  }
+  for (var i = 0; i < data.length && i < limit; i++) {
+    drawRow(id, data[i], donors);
+  }
 }
 
 function drawRow(id, rowData, donors) {
-    var row = $("<tr />")
-    $(id).append(row);
-    var donor = donors[rowData.ownerID1];
-    row.append($("<td class=\"fit\"><img height=\"128\" width=\"128\" src=\"" + donor.img + "\"></td>"));
-    row.append($("<td>" + donor.name + "</td>"));
-    row.append($("<td style=\"text-align: right\">" + rowData.amount + "</td>"));
+  var row = $("<tr />")
+  $(id).append(row);
+  var donor = donors[rowData.ownerID1];
+  row.append($("<td class=\"fit\"><img height=\"128\" width=\"128\" src=\"" + donor.img + "\"></td>"));
+  row.append($("<td>" + donor.name + "</td>"));
+  row.append($("<td style=\"text-align: right\">" + withCommas(rowData.amount) + "</td>"));
 }
 
-$.getJSON( "http://52.25.48.246/slyce/info/top.json" )
+$.getJSON( "./top.json" )
   .done(function( json ) {
-  	var limit = 5;
+    var limit = 5;
     console.log( "JSON Data: " + json );
     console.log( "JSON Balance: " + json.balance );
     drawTable('#top', json.top, json.donors, limit);
@@ -206,27 +196,29 @@ $.getJSON( "http://52.25.48.246/slyce/info/top.json" )
     drawTable('#top_last_week', json.top_last_week, json.donors, limit);
     drawTable('#top_current_month', json.top_month, json.donors, limit);
     drawTable('#top_last_month', json.top_last_month, json.donors, limit);
-	if (json.donations.length>0) {
-		$("#top_title").text("Top Donors, Since " + json.donations[json.donations.length-1].date);
-	}
+    if (json.donations.length>0) {
+      $("#top_title").text("Top Donors, Since " + json.donations[json.donations.length-1].date);
+    }
     $("#balance").text(json.balance + " ISK")
     var percent = Math.floor(json.balance/goal*100);
     $("#balance-bar").width(percent + '%')
     $("#balance-bar").attr('aria-valuenow',json.balance)
     $("#balance-text").text(percent + "% of GOAL: " + withCommas(json.balance) + " of " + withCommas(goal) + " ISK")
     for (var i = 0; i < json.donations.length; i++) {
-        var row = $("<tr />")
-	    $("#donations").append(row);
-	    var donor = json.donors[json.donations[i].ownerID1];
-	    row.append($("<td>" + json.donations[i].date + "</td>"));
-	    row.append($("<td style=\"text-align: right\">" + json.donations[i].amount + "</td>"));
-	    row.append($("<td>" + donor.name + "</td>"));
-	    row.append($("<td>" + json.donations[i].reason + "</td>"));
+      var row = $("<tr />")
+      $("#donations").append(row);
+      var donor = json.donors[json.donations[i].ownerID1];
+      row.append($("<td>" + json.donations[i].date + "</td>"));
+      row.append($("<td style=\"text-align: right\">" + withCommas(json.donations[i].amount) + "</td>"));
+      row.append($("<td>" + donor.name + "</td>"));
+      row.append($("<td>" + json.donations[i].reason + "</td>"));
     }
   })
   .fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
+    $("#error_message").text("Request Failed: " + err);
+    $("#error_modal").modal('show');
 });
 </script>
  
