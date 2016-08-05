@@ -28,24 +28,32 @@ def load_json( filename, new_json ):
 # save json to file
 def save_json( filename, data ):
 	file = open(filename, "w")
-	json.dump(data, file)
+	json.dump(data, file, indent=4, sort_keys=True)
 	file.close
 
 # Get the correct image path for the donor typeid: http://eve-files.com/chribba/typeid.txt
-def get_img_url(id, typeid):
-	if typeid == '2':
+def get_img_url(id, typeid, refTypeID):
+	# Shitty data cleanup, if no owner type guess corp if was corp wallet transaction
+	if typeid == 0:
+		if refTypeID == 37:
+			typeid = 2
+	if typeid == 2:
 		return 'http://imageserver.eveonline.com/Corporation/%s_128.png' % ( id )
-	elif typeid == '16159':
+	elif typeid == 16159:
 		return 'http://imageserver.eveonline.com/Alliance/%s_128.png' % ( id )
 	# 1373-1386   Character + Race
 	return 'https://imageserver.eveonline.com/Character/%s_128.jpg' % ( id )
 
-# Extract the top 5 donors
-def json5(label, donations, jdict):
+# Extract the top N donors
+def extract_top_rows(label, donations, jdict, limit):
 	rows = []
 	sorted_x = sorted(donations.items(), key=operator.itemgetter(1), reverse=True)
+	count = limit
 	for k,v in sorted_x:
 		rows.append({'ownerID1': k, 'amount': v})
+		count -= 1
+		if (count == 0):
+			break
 	jdict[label] = rows
 
 # Download wallet balance
@@ -58,6 +66,18 @@ def balance():
 		if ( dataNode.attributes["accountKey"].value == "1000" ):
 			return long((float)(dataNode.attributes["balance"].value))
 	return 0
+
+# Lookup character name
+chars = dict()
+def get_char_name(id):
+	if (id in chars):
+		return chars[id]
+	apiURL = 'https://api.eveonline.com/eve/CharacterName.xml.aspx?ids=%s' % (id)
+	downloadedData = urllib.urlopen(apiURL)
+	XMLData = xml.dom.minidom.parse(downloadedData)
+	name = XMLData.getElementsByTagName("row")[0].attributes['name'].value
+	chars[id] = name
+	return name
 
 # Download wallet transactions, convert to json, de-dupe and merge with saved transaction history
 def download_transactions(): 
@@ -79,7 +99,18 @@ def download_transactions():
 	tx_ids = []
 	for trow in transactions:
 		tx_ids.append(trow['refID'])
-
+		# shitty data cleanup, get char/corp names
+		# try:
+		# 	if ('ownerName1' not in trow):
+		# 		trow['ownerName1'] = get_char_name(trow['ownerID1'])
+		# except:
+		# 	pass
+		# try:
+		# 	if ('ownerName2' not in trow):
+		# 		trow['ownerName2'] = get_char_name(trow['ownerID2'])
+		# except:
+		# 	pass
+	
 	dataNodes = XMLData.getElementsByTagName("row")
 	for dataNode in dataNodes:
 		if ( (long)(dataNode.attributes['refID'].value) in tx_ids):
@@ -125,8 +156,11 @@ topw1 = {}
 topm = {}
 topm1 = {}
 for r in transactions:
-	if ( r["ownerName1"] == "SLYCE Hull Incidents Investigation Team" ):
+	# 10 = player donation, 37 = Corp Account Withdrawal (corp donation)
+	if ( r['refTypeID'] != 10 and r['refTypeID'] != 37 ):
 		continue
+	if ( r["ownerName1"] == "SLYCE Hull Incidents Investigation Team" or r['ownerName1'] == 'SLYCE SRP'):
+	 	continue
 
 	date = datetime.datetime.strptime(r["date"],'%Y-%m-%d %H:%M:%S').date()
 	top[r["ownerID1"]] = top.get(r["ownerID1"], 0) + (float)(r["amount"])
@@ -140,19 +174,19 @@ for r in transactions:
 		 topm1[r["ownerID1"]] = topm1.get(r["ownerID1"], 0) + (float)(r["amount"])
 	
 	jrow = dict()
-	jdict['donors'][r['ownerID1']] = { 'name': r["ownerName1"], 'img': get_img_url(r['ownerID1'], r['owner1TypeID']) }
+	jdict['donors'][r['ownerID1']] = { 'name': r["ownerName1"], 'img': get_img_url(r['ownerID1'], r.get('owner1TypeID',0), r['refTypeID']) }
 	for f in report_fields:
-		# if ( "amount" == f ):
-		# 	jrow[f] = "{:,}".format(long((float)(r[f])))
-		# else:
 		jrow[f] = r[f]
 	jdict['donations'].append(jrow)
 
-json5("top", top, jdict);
-json5("top_week", topw, jdict);
-json5("top_last_week", topw1, jdict);
-json5("top_month", topm, jdict);
-json5("top_last_month", topm1, jdict);
+limit=5
+extract_top_rows("top", top, jdict, limit);
+extract_top_rows("top_week", topw, jdict, limit);
+extract_top_rows("top_last_week", topw1, jdict, limit);
+extract_top_rows("top_month", topm, jdict, limit);
+extract_top_rows("top_last_month", topm1, jdict, limit);
+
+jdict['donations'].sort(key=operator.itemgetter('date'), reverse=True) 
 
 save_json("top.json", jdict)
 

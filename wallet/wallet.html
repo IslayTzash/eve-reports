@@ -11,6 +11,7 @@
     white-space: nowrap;
     width: 1%;
   }
+  .donations-toolbar { float: left; }
   /* For fixed navbar */
   body {
     padding-top: 65px;
@@ -27,7 +28,7 @@
   <link rel="shortcut icon" href="/intel/img/slyce-logo-150.png" />
   <!-- link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cyborg/bootstrap.min.css" rel="stylesheet">
-  <!-- link href="/intel/css/intel.css" rel="stylesheet" -->  
+  <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -88,7 +89,6 @@
 </div>
 
 <div class="container">
-  <h3>Donation Log</h3>
   <table id="donations" class="table table-hover">
   <thead> 
       <tr>
@@ -155,6 +155,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
 <script>
 
@@ -213,6 +214,15 @@ $.getJSON( "./top.json" )
       row.append($("<td>" + donor.name + "</td>"));
       row.append($("<td>" + json.donations[i].reason + "</td>"));
     }
+    $('#donations').DataTable({
+      "paging":   false,
+      "ordering": true,
+      "info":     false,
+      "search":   false,
+      "order": [[ 0, "desc" ]],
+      "dom": '<"donations-toolbar">frtip'
+    });
+    $("div.donations-toolbar").html('<b style="font-size: 200%">Donation Log</b>');
   })
   .fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
@@ -220,6 +230,8 @@ $.getJSON( "./top.json" )
     $("#error_message").text("Request Failed: " + err);
     $("#error_modal").modal('show');
 });
+
+  
 </script>
  
 </body>
