@@ -58,7 +58,7 @@ def extract_top_rows(label, donations, jdict, limit):
 
 # Download wallet balance
 def balance():
-	balanceApiURL = 'https://api.eveonline.com/corp/AccountBalance.xml.aspx?vCode=%s&keyID=%s&accountKey=%s' % (config['vCode'], config['keyID'], accountKey)
+	balanceApiURL = 'https://api.eveonline.com/%s/AccountBalance.xml.aspx?vCode=%s&keyID=%s&accountKey=%s' % (config['type'], config['vCode'], config['keyID'], accountKey)
 	downloadedData = urllib.urlopen(balanceApiURL)
 	XMLData = xml.dom.minidom.parse(downloadedData)
 	dataNodes = XMLData.getElementsByTagName("row")
@@ -82,7 +82,7 @@ def get_char_name(id):
 # Download wallet transactions, convert to json, de-dupe and merge with saved transaction history
 def download_transactions(): 
 	#Download the Account Balance Data
-	apiURL = 'https://api.eveonline.com/corp/WalletJournal.xml.aspx?vCode=%s&keyID=%s&accountKey=%s' % (config['vCode'], config['keyID'], accountKey)
+	apiURL = 'https://api.eveonline.com/%s/WalletJournal.xml.aspx?vCode=%s&keyID=%s&accountKey=%s' % (config['type'], config['vCode'], config['keyID'], accountKey)
 	print apiURL
 	downloadedData = urllib.urlopen(apiURL)
 

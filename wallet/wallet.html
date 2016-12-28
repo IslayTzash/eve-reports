@@ -181,7 +181,7 @@
 var goal = 500000000000;
 
 function withCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",&#8203;");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function drawTable(id, data, donors, limit) {
@@ -239,7 +239,11 @@ $.getJSON( "./top.json" )
       "info":     false,
       "search":   false,
       "order": [[ 0, "desc" ]],
-      "dom": '<"donations-toolbar">frtip'
+      "dom": '<"donations-toolbar">frtip',
+      "language": {
+        "decimal": ".",
+        "thousands": ","
+      }
     });
     $("div.donations-toolbar").html('<b style="font-size: 200%">Donation Log</b>');
   })

@@ -139,7 +139,7 @@ function drawCharRow(id, data, corps) {
 
 
 function withCorpJson(corps) {
-$.getJSON( "http://52.25.48.246/slyce/info/chars.json" )
+$.getJSON( "/slyce/info/chars.json" )
   .done(function( json ) {
     drawChars('#roster', json, corps);
   })
@@ -149,7 +149,7 @@ $.getJSON( "http://52.25.48.246/slyce/info/chars.json" )
   });
 }
 
-$.getJSON( "http://52.25.48.246/slyce/info/corps.json" )
+$.getJSON( "/slyce/info/corps.json" )
   .done(function( json ) {
      withCorpJson(json);
   })
@@ -158,7 +158,7 @@ $.getJSON( "http://52.25.48.246/slyce/info/corps.json" )
     console.log( "Request Failed: " + err );
   });
 
-$.getJSON( "http://52.25.48.246/slyce/info/additions.json" )
+$.getJSON( "/slyce/info/additions.json" )
   .done(function( json ) {
     drawTable('#new-recruits', 'new-recruits', 'New Recruits', json, 1000);
   })
@@ -167,7 +167,7 @@ $.getJSON( "http://52.25.48.246/slyce/info/additions.json" )
     console.log( "Request Failed: " + err );
   });
 
-$.getJSON( "http://52.25.48.246/slyce/info/subtractions.json" )
+$.getJSON( "/slyce/info/subtractions.json" )
   .done(function( json ) {
     drawTable('#deserters', 'deserters', 'Deserters', json, 1000);
   })
