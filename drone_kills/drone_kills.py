@@ -98,7 +98,7 @@ page=1
 count=0
 
 # Read latest killmails
-while False:
+while True:
 	url = "https://zkillboard.com/api/allianceID/%s/reset/groupID/101/startTime/201712010000/page/%d/" % (allianceId, page)
 	print "URL %s" % (url)
 	headers = { 'User-Agent' : 'Mozilla/5.0' }

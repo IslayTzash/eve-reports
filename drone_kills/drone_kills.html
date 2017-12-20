@@ -19,8 +19,6 @@ padding-top: 65px;
   margin-bottom: 19px;
 }
 .roster-toolbar { float: left; }
-.deserters-toolbar { float: left; }
-.new-recruits-toolbar { float: left; }
 .spacer { margin-bottom: 30px; }
 
 @media (max-width: 767px) {
@@ -50,7 +48,7 @@ padding-top: 65px;
 
 <div class="container">
 <table id="roster" class="table table-hover">
-<thead><th>Kills</th><th>Name</th><th>Ticker</th><th>Corp</th></thead>
+<thead><th>Kills</th><th data-sortable="false"/><th>Name</th><th data-sortable="false"/><th>Ticker</th><th>Corp</th></thead>
 </table>
 </div>
 
@@ -61,42 +59,43 @@ padding-top: 65px;
 
 <script>
 
-function drawChars(id, data, corps) {
+function drawChars(id, data) {
     if ( data && ! jQuery.isEmptyObject(data) ) {
         for (var key in data) {
-            drawCharRow(id, data[key], corps);
+            drawCharRow(id, data[key]);
         }
     }
     $('#roster').DataTable({
         "paging":   false,
         "ordering": true,
         "info":     false,
-        "order": [[ 0, "asc" ]],
+	"searching": false,
+        "order": [[ 0, "descending" ]],
         "dom": '<"roster-toolbar">frtip'
     });
-    $("div.roster-toolbar").html('<b style="font-size: 200%">Current Roster</b>');
+    // $("div.roster-toolbar").html('');
 }
 
-function drawCharRow(id, data, corps) {
+function drawCharRow(id, data) {
     var row = $("<tr />")
     $(id).append(row);
     row.append($("<td>" + data['kills']  + "</td>"));
+    row.append($("<td>" + '<a href="https://zkillboard.com/character/' + data['id'] + '/reset/group/101/losses/"><img src="https://imageserver.eveonline.com/Character/' + data['id'] + '_64.jpg" class="img-circle" style="width: 32px;" alt="" /></a>'  + "</td>"));
     row.append($("<td>" + data['name']  + "</td>"));
+    row.append($("<td>" + '<a href="https://zkillboard.com/corporation/' + data['corp']['id'] + '/reset/group/101/losses/"><img src="https://imageserver.eveonline.com/Corporation/' + data['corp']['id'] + '_64.png" class="img-circle" style="width: 32px;" alt="" /></a>'  + "</td>"));
     row.append($("<td>" + data['corp']['ticker']  + "</td>"));
     row.append($("<td>" + data['corp']['name']  + "</td>"));
 }
 
 
-function withCorpJson(corps) {
 $.getJSON( "/slyce/info/dk_chars.json" )
   .done(function( json ) {
-    drawChars('#roster', json, corps);
+    drawChars('#roster', json);
   })
   .fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
   });
-}
 
 </script>
  
