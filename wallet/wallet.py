@@ -187,6 +187,7 @@ extract_top_rows("top_month", topm, jdict, limit);
 extract_top_rows("top_last_month", topm1, jdict, limit);
 
 jdict['donations'].sort(key=operator.itemgetter('date'), reverse=True) 
+jdict['updated'] = datetime.datetime.utcnow().strftime("%Y/%m/%d %H:%M:%S UTC")
 
 save_json("top.json", jdict)
 
