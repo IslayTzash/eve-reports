@@ -69,9 +69,8 @@ def get_char_name(id):
 
 chars = load_json( "chars.json" )
 corp_cache = load_json( "corps.json" )
-kills = dict()
-for k,v in load_json( "kills.json" ).iteritems():
-    kills[k] = v
+victims = load_json( "victims.json" )
+kills = load_json( "kills.json" )
 
 def get_corp_info( id ):
         id = str(id)
@@ -98,7 +97,7 @@ page=1
 count=0
 
 # Read latest killmails
-while True:
+while False:
 	url = "https://zkillboard.com/api/allianceID/%s/reset/groupID/101/startTime/201712010000/page/%d/" % (allianceId, page)
 	print "URL %s" % (url)
 	headers = { 'User-Agent' : 'Mozilla/5.0' }
@@ -117,6 +116,9 @@ while True:
 	page += 1
 
 print "Read %d pages, Found %d kills, Total %d kills" % (page, count, len(kills))
+
+for k,v in chars.iteritems():
+    v['kills'] = 0
 
 for k,v in kills.iteritems():
     if str(v['victim']['alliance_id']) == allianceId:
@@ -142,8 +144,28 @@ for k,v in kills.iteritems():
             c['kills'] = 1
             chars[id] = c
 
+for k,v in victims.iteritems():
+    v['kills'] = 0
+    v['losses'] = 0
+
+for k,val in kills.iteritems():
+    v = val['victim']
+    zkb = val['zkb']
+    if str(v['alliance_id']) == allianceId:
+        continue
+    id = str(v['alliance_id'])
+    if id in victims:
+        victims[id]['kills'] += 1
+        victims[id]['losses'] += zkb['fittedValue']
+    else:
+        c = dict()
+        c['id'] = id
+        c['kills'] = 1
+        c['losses'] = zkb['fittedValue']
+        victims[id] = c
 
 save_json("kills.json", kills)
 save_json("chars.json", chars)
 save_json("corps.json", corp_cache)
+save_json("victims.json", victims)
 
