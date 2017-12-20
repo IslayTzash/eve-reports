@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SLYCE DRONE KILLS</title>
+  <style>
+	.table td.fit, 
+	.table th.fit {
+	    white-space: nowrap;
+	    width: 1%;
+	}
+	/* For fixed navbar */
+	body {
+padding-top: 65px;
+}
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+.roster-toolbar { float: left; }
+.deserters-toolbar { float: left; }
+.new-recruits-toolbar { float: left; }
+.spacer { margin-bottom: 30px; }
+
+@media (max-width: 767px) {
+	body {
+  padding-top: 145px;
+}
+}
+
+
+  </style>
+  <link rel="shortcut icon" href="/intel/img/slyce-logo-150.png" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cyborg/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">SLYCE DRONE KILLS</a>
+    </div>
+</nav>
+
+<div class="container">
+<table id="roster" class="table table-hover">
+<thead><th>Kills</th><th>Name</th><th>Ticker</th><th>Corp</th></thead>
+</table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+function drawChars(id, data, corps) {
+    if ( data && ! jQuery.isEmptyObject(data) ) {
+        for (var key in data) {
+            drawCharRow(id, data[key], corps);
+        }
+    }
+    $('#roster').DataTable({
+        "paging":   false,
+        "ordering": true,
+        "info":     false,
+        "order": [[ 0, "asc" ]],
+        "dom": '<"roster-toolbar">frtip'
+    });
+    $("div.roster-toolbar").html('<b style="font-size: 200%">Current Roster</b>');
+}
+
+function drawCharRow(id, data, corps) {
+    var row = $("<tr />")
+    $(id).append(row);
+    row.append($("<td>" + data['kills']  + "</td>"));
+    row.append($("<td>" + data['name']  + "</td>"));
+    row.append($("<td>" + data['corp']['ticker']  + "</td>"));
+    row.append($("<td>" + data['corp']['name']  + "</td>"));
+}
+
+
+function withCorpJson(corps) {
+$.getJSON( "/slyce/info/dk_chars.json" )
+  .done(function( json ) {
+    drawChars('#roster', json, corps);
+  })
+  .fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+  });
+}
+
+</script>
+ 
+</body>
+</html>
