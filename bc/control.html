@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BEE CONTROL EFFORTS</title>
+  <title>BEE CONTROL</title>
   <style>
 	.table td.fit, 
 	.table th.fit {
@@ -30,15 +30,28 @@
 </head>
 <body>
 
+<div class="container">
+
 <div class="jumbotron">
+  <div class="container">
+    <div class="row">
+       <div class="col-md-4">
+         <img src="fatbee-256.png" />
+       </div>
+       <div class="col-md-8">
   <h1>Bee Control</h1>
   <p class="lead" id="summary-text"></p>
-  <p><a class="btn btn-lg btn-success" href="http://www.beecontrol.fun/" role="button">Join the Fight</a></p>
+  <p><a class="btn btn-lg btn-success" href="http://www.beecontrol.fun/" role="button">Register as an Exterminator</a></p>
+       </div>
+    </div>
+  </div>
 </div>
 
 <table id="kills" class="table table-hover">
-<thead><th>Kills</th><th>ISK (billions)</th><th data-sortable="false"/><th>Name</th><th>Ticker</th></thead>
+<thead><th>Kills</th><th>ISK (bil)</th><th data-sortable="false"/><th>Alliance</th></thead>
 </table>
+</div>
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
@@ -70,7 +83,7 @@ function drawChars(id, data) {
         "dom": '<"kills-toolbar">frtip'
     });
 
-    $("#summary-text").html('This month ' + withCommas(totalKills) + ' drones have been destroyed valued at ' + withCommas(Math.floor(totalIsk/1000000000.0)) + ' billion ISK.')
+    $("#summary-text").html('This month ' + withCommas(totalKills) + ' excavator drones have been destroyed valued at ' + withCommas(Math.floor(totalIsk/1000000000.0)) + ' billion ISK.')
 
 }
 
@@ -80,8 +93,7 @@ function drawCharRow(id, data) {
     row.append($("<td>" + data['kills']  + "</td>"));
     row.append($("<td>" + Math.floor(data['isk']/1000000000.0) + "</td>"));
     row.append($("<td>" + '<img src="https://imageserver.eveonline.com/Alliance/' + data['id'] + '_64.png" alt="" />'  + "</td>"));
-    row.append($("<td>" + data['name']  + "</td>"));
-    row.append($("<td>" + data['ticker']  + "</td>"));
+    row.append($("<td>" + data['name']  + " [" + data['ticker'] + "]</td>"));
 
     totalKills += data['kills']
     totalIsk   += data['isk']
