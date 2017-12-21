@@ -42,13 +42,14 @@
   <h1>Bee Control</h1>
   <p class="lead" id="summary-text"></p>
   <p><a class="btn btn-lg btn-success" href="http://www.beecontrol.fun/" role="button">Register as an Exterminator</a></p>
+  <p><small><small>Bee Control was launched December 2, 2017.</small></small></p>
        </div>
     </div>
   </div>
 </div>
 
 <table id="kills" class="table table-hover">
-<thead><th>Kills</th><th>ISK (bil)</th><th data-sortable="false"/><th>Alliance</th></thead>
+<thead><th>Losses</th><th>ISK (bil)</th><th data-sortable="false"/><th>Alliance</th></thead>
 </table>
 </div>
 
@@ -91,7 +92,7 @@ function drawCharRow(id, data) {
     var row = $("<tr />")
     $(id).append(row);
     row.append($("<td>" + data['kills']  + "</td>"));
-    row.append($("<td>" + Math.floor(data['isk']/1000000000.0) + "</td>"));
+    row.append($("<td>" + Math.floor((data['isk']+500000000)/1000000000.0) + "</td>"));
     row.append($("<td>" + '<img src="https://imageserver.eveonline.com/Alliance/' + data['id'] + '_64.png" alt="" />'  + "</td>"));
     row.append($("<td>" + data['name']  + " [" + data['ticker'] + "]</td>"));
 

@@ -1,21 +1,5 @@
 #!/usr/bin/python
 
-# Get somewhat stale member data for an alliance (I'm not sure how often EveWho data is updated)
-#  * https://forums.eveonline.com/default.aspx?g=posts&t=25940&p=2 - Characters are updated every
-#    few days. Also, I might not have the missing character in the database. If you know who it
-#    is search for their name and they'll get added automatically.
-# 
-# Generates a CSV with names and corp info for all current members of the alliance (according to EveWho)
-#  * roster.csv
-#
-# Also generates json files:
-#  * chars.json - current roster
-#  * additions.json - chars added since last run of tool
-#  * subtractions.json - chars left since last run of tool
-#  * corps - corporation names & tickers
-
-# Change to your alliance id
-allianceId='1354830081'   # Goons
 startTime='201712010000'
 
 import json
@@ -68,12 +52,11 @@ count=0
 
 # Read latest killmails
 while False:
-	url = "https://zkillboard.com/api/allianceID/%s/reset/groupID/101/startTime/%s/page/%d/" % (allianceId, startTime, page)
+	url = 'https://zkillboard.com/api/shipID/41030/startTime/%s/page/%d/' % (startTime, page)
 	print "URL %s" % (url)
 	headers = { 'User-Agent' : 'Mozilla/5.0' }
 	req = urllib2.Request(url, None, headers)
 	data = urllib2.urlopen( req ).read()
-	#print data
 	output = json.loads(data)
 	if not output:
 		break
@@ -93,24 +76,23 @@ for k in killers:
 
 for k in kills:
     v = kills[k]
-    if str(v['victim']['alliance_id']) != allianceId:
+    if not 'alliance_id' in v['victim']:
         continue
-    for a in v['attackers']:
-        if not 'alliance_id' in a or str(a['alliance_id']) == allianceId:
-            continue
-        id = str(a['alliance_id'])
-        if id in killers:
-            killers[id]['kills'] += 1
-            killers[id]['isk'] += v['zkb']['fittedValue']
-        else:
-            c = dict()
-            c['id'] = id
-            c['kills'] = 1
-            c['isk'] = 0
-            if id in alliances:
-                c['name'] = alliances[id]['name']
-                c['ticker'] = alliances[id]['ticker']
-            killers[id] = c
+    if v['zkb']['npc']:
+        continue
+    id = str(v['victim']['alliance_id'])
+    if id in killers:
+        killers[id]['kills'] += 1
+        killers[id]['isk'] += v['zkb']['fittedValue']
+    else:
+        c = dict()
+        c['id'] = id
+        c['kills'] = 1
+        c['isk'] = 0
+        if id in alliances:
+            c['name'] = alliances[id]['name']
+            c['ticker'] = alliances[id]['ticker']
+        killers[id] = c
 
 save_json("kills.json", kills)
 save_json("killers.json", killers)
