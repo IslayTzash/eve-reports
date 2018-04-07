@@ -36,20 +36,25 @@
   <div class="container">
     <div class="row">
        <div class="col-md-4">
-         <img src="fatbee-256.png" />
+<object data="http://www.youtube.com/embed/FiVhCiGo-LY" width="280" height="157"></object>
+         <!--img src="fatbee-256.png" /-->
        </div>
        <div class="col-md-8">
   <h1>Bee Control</h1>
   <p class="lead" id="summary-text"></p>
-  <p><a class="btn btn-lg btn-success" href="http://www.beecontrol.fun/" role="button">Register as an Exterminator</a></p>
-  <p><small><small><small>Bee Control was launched December 2, 2017.</small></small></small></p>
+  <!-- button sticks out to far on mobile without ws:normal -->
+  <p><a class="btn btn-lg btn-success" href="http://www.beecontrol.fun/" role="button" style="white-space: normal;">Register as an Exterminator</a></p>
+  <p><small><small><small>Mittani mentioned Bee Control had no impact on November MER.  Bee Control was launched December 2, 2017.</small></small></small></p>
 <nav aria-label="...">
   <ul class="pagination">
-    <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-    <li class="active"><a href="#">Dec<span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">Jan<span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">Feb<span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    <!-- li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li -->
+    <li id="killdate_201712"><a href="/slyce/info/bee_control.html?killdata=201712">Dec '17</a></li>
+    <li id="killdate_201801"><a href="/slyce/info/bee_control.html?killdata=201801">Jan '18</a></li>
+    <!-- li id="killdate_201802"><a href="/slyce/info/bee_control.html?killdata=201802">Feb '18</a></li -->
+    <!-- li id="killdate_201803"><a href="/slyce/info/bee_control.html?killdata=201803">Mar '18</a></li -->
+    <li id="killdate_"><a href="/slyce/info/bee_control.html">Apr '18</a></li>
+    <li class="disabled"><a href="#">May '18</a></li>
+    <!-- li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li -->
   </ul>
 </nav>
        </div>
@@ -110,7 +115,21 @@ function drawCharRow(id, data) {
 }
 
 
-$.getJSON( "/slyce/info/bee_killers.json" )
+var killdate = ""
+var killdata = "/slyce/info/bee_killers.json";
+var sPageURL = window.location.search.substring(1);
+var sURLVariables = sPageURL.split(/[&;]/);
+for (var i = 0; i < sURLVariables.length; i++)
+{
+    var sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] == 'killdata')
+    {
+	killdate = sParameterName[1];
+        killdata = "/slyce/info/bee_killers_" + sParameterName[1] + ".json";
+    }
+}
+$("#killdate_"+killdate).addClass("active");
+$.getJSON( killdata  )
   .done(function( json ) {
     drawChars('#kills', json);
   })

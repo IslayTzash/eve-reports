@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-startTime='201712010000'
+startTime='201804010000'
 
 import json
 import csv
@@ -45,13 +45,13 @@ def refresh_alliances():
 		alliances[dataNode.attributes["allianceID"].value] = a
 	return 0
 
-# refresh_alliances()
+refresh_alliances()
 
 page=1
 count=0
 
 # Read latest killmails
-while False:
+while True:
 	url = 'https://zkillboard.com/api/shipID/41030/startTime/%s/page/%d/' % (startTime, page)
 	print "URL %s" % (url)
 	headers = { 'User-Agent' : 'Mozilla/5.0' }
